@@ -160,5 +160,6 @@ cython_debug/
 .idea/
 _tmp
 sendmails
+config.ini
 
 

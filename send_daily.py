@@ -44,7 +44,7 @@ def sendmail(msg_content,filename_string):
     mail_user = "notice-mee@qq.com"  # 用户名
     mail_pass = "dcifrbxzunncdjfd"  # 口令
     sender = 'notice-mee@qq.com'
-    receivers = ';'.join(['sunruiqian@sd.chinamobile.com','notice-mee@qq.com'])
+    receivers = ';'.join(['sunruiqian@139.com','notice-mee@qq.com'])
     # receivers = ['sunruiqian@sd.chinamobile.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
     # receivers.append(receiver)
     message = MIMEMultipart()

@@ -9,11 +9,17 @@ from jinja2 import Environment, FileSystemLoader
 import os
 from pyhtml2pdf import converter
 from email.mime.multipart import MIMEMultipart
+from configparser import ConfigParser
 
 
 class Send():
 
     def __init__(self):
+        file = 'config.ini'
+        self.config = ConfigParser()
+        self.config.read(file, encoding='utf-8')
+        print(self.config['db'])
+
         con_lists = self.pull_news()
         print("Get" + str(len(con_lists)) + "news")
         content = []
@@ -48,7 +54,7 @@ class Send():
             f'sendmails/{filename_string}.pdf')
         # compressor.compress(f'sendmails/{filename_string}.pdf', f'sendmails/{filename_string}.pdf')
         print("PrintPDF Down")
-        self.sendmail(output, filename_string)
+        #self.sendmail(output, filename_string)
 
     def pull_news(self):
         db = pymysql.connect(
@@ -80,8 +86,8 @@ class Send():
         mail_pass = "dcifrbxzunncdjfd"  # 口令
         sender = 'notice-mee@qq.com'
         receivers = ';'.join(
-            ['sunruiqian@sd.chinamobile.com', 'notice-mee@qq.com'])
-        # receivers = ['sunruiqian@sd.chinamobile.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
+            ['sunruiqian@139.com', 'notice-mee@qq.com'])
+
         # receivers.append(receiver)
         message = MIMEMultipart()
         message['From'] = Header(f"今日分享文章 {sender}", 'utf-8')
