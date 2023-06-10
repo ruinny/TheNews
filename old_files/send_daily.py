@@ -92,7 +92,7 @@ for item in con_lists:
                     'website': item[3],
                     'url': item[4],
                     'keywords':item[5]})
-file_loader = FileSystemLoader('templates')
+file_loader = FileSystemLoader('../templates')
 env = Environment(loader=file_loader)
 template = env.get_template('mail.html')
 output = template.render(content=content,date=(datetime.now() -timedelta(days=1)).strftime('%Y-%m-%d'))

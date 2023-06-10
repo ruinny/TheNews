@@ -57,11 +57,11 @@ class Send():
 
     def pull_news(self):
         db = pymysql.connect(
-            host='db.panel.anyni.com',
+            host=self.config['db']['host'],
             port=13306,
-            user='newspaper',
-            passwd='JWzXYMKcqDtdS5OL',
-            db='newspaper')
+            user=self.config['db']['user'],
+            passwd=self.config['db']['passwd'],
+            db=self.config['db']['db'])
         cursor = db.cursor()
         sql = "select date,title_1,content,website,url,keywords from news where date = '" + \
             (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d') + "'"
@@ -80,13 +80,12 @@ class Send():
 
     def sendmail(self, msg_content, filename_string):
         # 第三方 SMTP 服务
-        config = configparser.ConfigParser()
-        config.read('config.ini', encoding='utf-8')
-        mail_host = config['mail']['mail_host']  # 设置服务器
-        mail_user = config['mail']['mail_user']  # 用户名
-        mail_pass = config['mail']['mail_pass']  # 口令
-        sender = config['mail']['sender']
-        rece = config['mail']['receiver']
+
+        mail_host = self.config['mail']['mail_host']  # 设置服务器
+        mail_user = self.config['mail']['mail_user']  # 用户名
+        mail_pass = self.config['mail']['mail_pass']  # 口令
+        sender = self.config['mail']['sender']
+        rece = self.config['mail']['receiver']
         receivers = rece.split(',')
 
         # receivers.append(receiver)
