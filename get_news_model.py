@@ -9,17 +9,20 @@ import jieba.analyse
 import re
 from pprint import pprint
 from itertools import chain
+import configparser
 
 
 class News():
 
     def __init__(self, sitename, get_date):
+        config = configparser.ConfigParser()
+        config.read('config.ini', encoding='utf-8')
         db = pymysql.connect(
-            host='db.panel.anyni.com',
+            host=config['db']['host'],
             port=13306,
-            user='newspaper',
-            passwd='JWzXYMKcqDtdS5OL',
-            db='newspaper')
+            user=config['db']['user'],
+            passwd=config['db']['passwd'],
+            db=config['db']['db'])
         cursor = db.cursor()
         sql = "select website_url,page_list_div,list_div,date_div,url_div,title_div,content_div from news_sites where website_name='" + sitename + "'"
         cursor.execute(sql)
@@ -42,8 +45,9 @@ class News():
         self.ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         self.urls = list(chain.from_iterable(data2))
         self.day_delay = 1
-        self.get_date = datetime.strptime(get_date.strftime('%Y-%m-%d'),'%Y-%m-%d')
-        #保留到天
+        self.get_date = datetime.strptime(
+            get_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
+        # 保留到天
         pprint('初始化完成')
         pprint(self.sitecons)
         pprint(self.urls)
@@ -100,13 +104,15 @@ class News():
                     date_str = item.find(date_div, first=True).text
                 else:
                     date_str = self.get_date.strftime('%Y-%m-%d')
-                #r = r"(.*)((((19|20)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((19|20)\d{2})-(0?[469]|11)-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-(0?[1-9]|[12]\d)))$(.*)"
-                r = '\d{4}-\d{1,2}-\d{1,2}'
-                #date = datetime.strptime(re.match(r, date_str).group(), '%Y-%m-%d')
-                date = datetime.strptime(re.findall(r,date_str)[0], '%Y-%m-%d')
+                # r = r"(.*)((((19|20)\d{2})-(0?[13578]|1[02])-(0?[1-9]|[12]\d|3[01]))|(((19|20)\d{2})-(0?[469]|11)-(0?[1-9]|[12]\d|30))|(((19|20)\d{2})-0?2-(0?[1-9]|1\d|2[0-8]))|((((19|20)([13579][26]|[2468][048]|0[48]))|(2000))-0?2-(0?[1-9]|[12]\d)))$(.*)"
+                r = '\\d{4}-\\d{1,2}-\\d{1,2}'
+                # date = datetime.strptime(re.match(r, date_str).group(), '%Y-%m-%d')
+                date = datetime.strptime(
+                    re.findall(r, date_str)[0], '%Y-%m-%d')
                 # 正则匹配日期
                 # print(datetime.strptime((datetime.now() - timedelta(days=self.day_delay)).strftime('%Y-%m-%d'),'%Y-%m-%d'))
-                get_date=datetime.strptime(self.get_date.strftime('%Y-%m-%d'),'%Y-%m-%d')
+                get_date = datetime.strptime(
+                    self.get_date.strftime('%Y-%m-%d'), '%Y-%m-%d')
 
                 if get_date == date:
                     temp_url = item.find(url_div, first=True)
@@ -162,12 +168,14 @@ class News():
 
     def insert_db(self):
         insert_num = 0
+        config = configparser.ConfigParser()
+        config.read('config.ini', encoding='utf-8')
         db = pymysql.connect(
-            host='db.panel.anyni.com',
+            host=config['db']['host'],
             port=13306,
-            user='newspaper',
-            passwd='JWzXYMKcqDtdS5OL',
-            db='newspaper')
+            user=config['db']['user'],
+            passwd=config['db']['passwd'],
+            db=config['db']['db'])
         cursor = db.cursor()
 
         for url in self.urls:
@@ -195,10 +203,11 @@ class News():
                         news['date'], news['title'], escape_string(
                             news['content']), news['keyword'], news['website'],
                         news['url'], datetime.now())
-                    sql_check="select * from news where url='"+news['url']+"'"
+                    sql_check = "select * from news where url='" + \
+                        news['url'] + "'"
                     try:
                         cursor.execute(sql_check)
-                        if cursor.rowcount>0:
+                        if cursor.rowcount > 0:
                             print("文章已经入库，跳出循环")
                             continue
                         else:

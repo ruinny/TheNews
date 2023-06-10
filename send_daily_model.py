@@ -9,15 +9,14 @@ from jinja2 import Environment, FileSystemLoader
 import os
 from pyhtml2pdf import converter
 from email.mime.multipart import MIMEMultipart
-from configparser import ConfigParser
+import configparser
 
 
 class Send():
 
     def __init__(self):
-        file = 'config.ini'
-        self.config = ConfigParser()
-        self.config.read(file, encoding='utf-8')
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini', encoding='utf-8')
         print(self.config['db'])
 
         con_lists = self.pull_news()
@@ -54,7 +53,7 @@ class Send():
             f'sendmails/{filename_string}.pdf')
         # compressor.compress(f'sendmails/{filename_string}.pdf', f'sendmails/{filename_string}.pdf')
         print("PrintPDF Down")
-        #self.sendmail(output, filename_string)
+        self.sendmail(output, filename_string)
 
     def pull_news(self):
         db = pymysql.connect(
@@ -81,16 +80,19 @@ class Send():
 
     def sendmail(self, msg_content, filename_string):
         # 第三方 SMTP 服务
-        mail_host = "smtp.qq.com"  # 设置服务器
-        mail_user = "notice-mee@qq.com"  # 用户名
-        mail_pass = "dcifrbxzunncdjfd"  # 口令
-        sender = 'notice-mee@qq.com'
-        receivers = ';'.join(
-            ['sunruiqian@139.com', 'notice-mee@qq.com'])
+        config = configparser.ConfigParser()
+        config.read('config.ini', encoding='utf-8')
+        mail_host = config['mail']['mail_host']  # 设置服务器
+        mail_user = config['mail']['mail_user']  # 用户名
+        mail_pass = config['mail']['mail_pass']  # 口令
+        sender = config['mail']['sender']
+        rece = config['mail']['receiver']
+        receivers = rece.split(',')
 
         # receivers.append(receiver)
         message = MIMEMultipart()
-        message['From'] = Header(f"今日分享文章 {sender}", 'utf-8')
+        # message['From'] = Header(f"今日分享文章 {sender}", 'utf-8')
+        message['From'] = 'NewsHelper <notice-mee@qq.com>'
         message['To'] = Header(f"{receivers}", 'utf-8')
         message['Subject'] = Header('今日分享文章', 'utf-8').encode()
         message.attach(MIMEText(msg_content, 'html', 'utf-8'))

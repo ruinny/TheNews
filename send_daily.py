@@ -42,13 +42,14 @@ def sendmail(msg_content,filename_string):
     # 第三方 SMTP 服务
     mail_host = "smtp.qq.com"  # 设置服务器
     mail_user = "notice-mee@qq.com"  # 用户名
-    mail_pass = "dcifrbxzunncdjfd"  # 口令
+    mail_pass = "lvstzjemguyldhig"  # 口令
     sender = 'notice-mee@qq.com'
     receivers = ';'.join(['sunruiqian@139.com','notice-mee@qq.com'])
     # receivers = ['sunruiqian@sd.chinamobile.com']  # 接收邮件，可设置为你的QQ邮箱或者其他邮箱
     # receivers.append(receiver)
     message = MIMEMultipart()
-    message['From'] = Header(f"今日分享文章 {sender}", 'utf-8')
+    #message['From'] = Header(f"今日分享文章 {sender}", 'utf-8') 202306腾讯更改政策
+    message['From'] = 'NewsHelper <notice-mee@qq.com>'
     message['To'] = Header(f"{receivers}", 'utf-8')
     message['Subject'] = Header('今日分享文章', 'utf-8').encode()
     message.attach(MIMEText(msg_content, 'html', 'utf-8'))

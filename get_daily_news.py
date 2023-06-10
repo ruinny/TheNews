@@ -10,20 +10,20 @@ news = News('三茅人力资源', get_date)
 num = news.insert_db()
 del news
 
-news = News('组织人事报',get_date)
-date_today = get_date.strftime('%Y-%m-%d')
-url = f'http://www.zuzhirenshi.com/dianzibao/{date_today}/1/index.htm'
-page_url = news.get_news_pages(url)
-num = news.insert_db()
-del news
+# news = News('组织人事报',get_date)
+# date_today = get_date.strftime('%Y-%m-%d')
+# url = f'http://www.zuzhirenshi.com/dianzibao/{date_today}/1/index.htm'
+# page_url = news.get_news_pages(url)
+# num = news.insert_db()
+# del news
 
-news = News('大厂人事', get_date)
-num = news.insert_db()
-del news
-
-news = News('中国人才网', get_date)
-num = news.insert_db()
-del news
+# news = News('大厂人事', get_date)
+# num = news.insert_db()
+# del news
+#
+# news = News('中国人才网', get_date)
+# num = news.insert_db()
+# del news
 
 
 sender=Send()
