@@ -25,8 +25,28 @@ ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like 
 # 获取新闻链接
 
 session = HTMLSession()
-pages = session.get('https://www.hrloo.com/rz/hot/p1', headers={'user-agent': ua})
-print(pages.html)
+pages = session.get('https://www.hrloo.com', headers={'user-agent': ua})
+print(type(pages))
+#pages.html.render(timeout=60, sleep=10)
+content=pages.html.find('div.data-item.fn-data-item > a.desc.fn-data-item-link')
+print(type(content))
+links=[]
+for li in content:
+    print(list(li.absolute_links)[0])
+    links.append(list(li.absolute_links)[0])
+print(links[0:14])
+#link=content.find('h2.m-t-none.text-ellipsis.index-post-title.text-title > a')
+#print(content.html)
+#print(type(link))
+#print(link)
+#for li in link:
+    #print(type(li))
+    #print(type(li.absolute_links))
+    #print(list(li.absolute_links)[0])
+    #links.append(li.absolute_links)
+#print(links)
+#print(link.absolute_links)
+
 
 
 

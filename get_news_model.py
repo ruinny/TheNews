@@ -195,11 +195,17 @@ class News():
                         news['date'], news['title'], escape_string(
                             news['content']), news['keyword'], news['website'],
                         news['url'], datetime.now())
+                    sql_check="select * from news where url='"+news['url']+"'"
                     try:
-                        cursor.execute(sql)
-                        db.commit()
-                        print('插入成功' + link)
-                        insert_num = insert_num + 1
+                        cursor.execute(sql_check)
+                        if cursor.rowcount>0:
+                            print("文章已经入库，跳出循环")
+                            continue
+                        else:
+                            cursor.execute(sql)
+                            db.commit()
+                            print('插入成功' + link)
+                            insert_num = insert_num + 1
                     except Exception as e:
                         db.rollback()
                         print("提交错误" + link)

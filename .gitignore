@@ -161,5 +161,6 @@ cython_debug/
 _tmp
 sendmails
 config.ini
+test1.py
 
 
