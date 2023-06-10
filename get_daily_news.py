@@ -5,6 +5,9 @@ get_date = datetime.now() - timedelta(days=1)
 # 加载获取新闻的日期
 print("获取新闻的日期已设定为" + get_date.strftime('%Y-%m-%d'))
 
+news = News('人社通', get_date)
+num = news.insert_db()
+del news
 
 news = News('三茅人力资源', get_date)
 num = news.insert_db()
@@ -17,13 +20,13 @@ del news
 # num = news.insert_db()
 # del news
 
-# news = News('大厂人事', get_date)
-# num = news.insert_db()
-# del news
-#
-# news = News('中国人才网', get_date)
-# num = news.insert_db()
-# del news
+news = News('大厂人事', get_date)
+num = news.insert_db()
+del news
+
+news = News('中国人才网', get_date)
+num = news.insert_db()
+del news
 
 
 sender=Send()
